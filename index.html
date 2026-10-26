@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Atrapa las frutas AR</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+</head>
+<body>
+
+    <!-- Interfaz de Usuario -->
+    <div id="ui-container">
+        <div id="scoreboard">
+            Puntos: <span id="score">0</span> | Vidas: <span id="vidas">3</span>
+        </div>
+
+        <div id="start-screen">
+            <h2>Atrapa las frutas</h2>
+            <p>Para empezar, apunta la cámara al marcador.</p>
+            <p>Después usa los botones para mover la canasta.</p>
+            <button id="btn-start">Escanear marcador</button>
+            <p id="camera-status">La cámara todavía no está activada.</p>
+        </div>
+
+        <!-- Pantalla que se muestra mientras se busca el marcador -->
+        <div id="scan-screen" class="hidden">
+            <h3 id="scan-title">Busca el marcador</h3>
+            <p id="scan-text">Enfoca el marcador y mantenlo a la vista.</p>
+            <img id="scan-preview" src="markers/marcador.png" alt="Marcador a buscar">
+        </div>
+
+        <div id="game-over-screen" class="hidden">
+            <h2>¡Fin del juego!</h2>
+            <p>Puntaje final: <span id="final-score">0</span></p>
+            <button id="btn-restart">Jugar de nuevo</button>
+        </div>
+
+        <div id="controls">
+            <button id="btn-left" aria-label="Mover a la izquierda">◀</button>
+            <button id="btn-right" aria-label="Mover a la derecha">▶</button>
+        </div>
+    </div>
+
+    <!-- Escena 3D con soporte de cámara nativo integrado -->
+    <a-scene
+        id="game-scene"
+        embedded
+        vr-mode-ui="enabled: false"
+        renderer="alpha: true; antialias: true; precision: medium"
+        loading-screen="enabled: false">
+
+        <a-assets timeout="20000">
+            <a-asset-item id="canasta-model" src="models/canasta.glb"></a-asset-item>
+            <a-asset-item id="fruta-model" src="models/manzana.glb"></a-asset-item>
+            <a-asset-item id="bomba-model" src="models/bomba.glb"></a-asset-item>
+        </a-assets>
+
+        <a-light type="ambient" color="#FFFFFF" intensity="2"></a-light>
+        <a-light type="directional" color="#FFFFFF" intensity="2" position="-1 3 2"></a-light>
+
+        <!-- Canasta -->
+        <a-entity id="canasta" 
+                  gltf-model="#canasta-model" 
+                  position="0 -1.25 -3" 
+                  scale="1 1 1"
+                  visible="false">
+        </a-entity>
+
+        <!-- Contenedor de frutas y bombas -->
+        <a-entity id="spawn-container"></a-entity>
+
+        <!-- Cámara AR con feed de video nativo -->
+        <a-entity id="ar-camera" camera position="0 0 0"></a-entity>
+    </a-scene>
+
+    <script src="script.js"></script>
+</body>
+</html>
